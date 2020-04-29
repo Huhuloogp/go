@@ -1,3 +1,16 @@
+!！！
+
+1、for循环遍历数组等时常与range结合使用
+
+	arr := [3]string{"smallming", "张", "佳明哥"}
+	for i, n := range arr {				//i可以换为_
+		//其中n=arr[i]
+		fmt.Println(i, n)
+	}
+
+
+
+
 # 一.for循环
 
 * 循环:让程序多次执行相同的代码块
