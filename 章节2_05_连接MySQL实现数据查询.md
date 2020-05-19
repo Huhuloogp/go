@@ -1,12 +1,15 @@
-1、如果修改前和修改后的值相同,RowsAffected()返回0，修改失败
+1、 rows,err:=stmt.Exec()——》rows,err:=stmt.Query()
+
+2、通过next方法进行循环遍历，for rows.Next(){
 
 
 
-# 一. 修改注意点
 
-* 修改和新增类似,只是不需要获取LastInsertId()和SQL语句是修改语句
-* 在Golang中要求:如果修改前和修改后的值相同,RowsAffected()返回0
-# 二.代码实现
+
+# 一.查询注意点
+
+* Golang中执行查询与新增、删除、修改中stmt的执行方法有区别,由于需要把查询到的结果取出来,所以还需要进行取值处理
+# 二.代码示例
 ```go
 package main
 
@@ -41,7 +44,7 @@ func main() {
       准备处理SQL语句
       支持占位符,防止SQL注入
     */
-   stmt,err:=db.Prepare("update people set name=?,address=? where id=?")
+   stmt,err:=db.Prepare("select * from people")
    //错误处理
    if err!=nil{
       fmt.Println("预处理失败",err)
@@ -56,21 +59,23 @@ func main() {
    /*
    Exec() 参数为不定项参数,对应占位符?个数
     */
-   res,err:=stmt.Exec("李四","朝阳",1)
-   //错误处理
+   rows,err:=stmt.Query()
    if err!=nil{
-      fmt.Println("执行SQL出现错误")
+      fmt.Println("查询失败",err)
    }
-   //受影响行数
-   count,err:=res.RowsAffected()
-   if err!=nil{
-      fmt.Println("获取结果失败",err)
+   //循环遍历结果
+   for rows.Next(){
+      var id int
+      var name,address string
+      //把行内值付给变量
+      rows.Scan(&id,&name,&address)
+      fmt.Println(id,name,address)
    }
-   if count>0{
-      fmt.Println("修改成功")
-   }else{
-      fmt.Println("修改失败")
-   }
+   defer func() {
+      if rows!=nil{
+         rows.Close()
+         fmt.Println("关闭结果集")
+      }
+   }()
 }
 ```
-

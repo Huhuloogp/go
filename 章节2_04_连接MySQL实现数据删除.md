@@ -1,11 +1,11 @@
-1、如果修改前和修改后的值相同,RowsAffected()返回0，修改失败
+1、在Go语言中要求如果要删除的数据不存在RowsAffected()返回0
 
 
 
-# 一. 修改注意点
+# 一.删除注意点
 
-* 修改和新增类似,只是不需要获取LastInsertId()和SQL语句是修改语句
-* 在Golang中要求:如果修改前和修改后的值相同,RowsAffected()返回0
+* 删除和修改、新增结构一样,区别为SQL语句
+* 在Go语言中要求如果要删除的数据不存在RowsAffected()返回0
 # 二.代码实现
 ```go
 package main
@@ -41,7 +41,7 @@ func main() {
       准备处理SQL语句
       支持占位符,防止SQL注入
     */
-   stmt,err:=db.Prepare("update people set name=?,address=? where id=?")
+   stmt,err:=db.Prepare("delete from people where id=?")
    //错误处理
    if err!=nil{
       fmt.Println("预处理失败",err)
@@ -56,7 +56,7 @@ func main() {
    /*
    Exec() 参数为不定项参数,对应占位符?个数
     */
-   res,err:=stmt.Exec("李四","朝阳",1)
+   res,err:=stmt.Exec(1)
    //错误处理
    if err!=nil{
       fmt.Println("执行SQL出现错误")
@@ -67,10 +67,9 @@ func main() {
       fmt.Println("获取结果失败",err)
    }
    if count>0{
-      fmt.Println("修改成功")
+      fmt.Println("删除成功")
    }else{
-      fmt.Println("修改失败")
+      fmt.Println("删除失败")
    }
 }
 ```
-

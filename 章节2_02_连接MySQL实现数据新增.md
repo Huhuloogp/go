@@ -13,6 +13,14 @@ go get -u github.com/go-sql-driver/mysql
 
 
 
+3、总结
+
+本地要先下载mysql，启动并创建表
+
+sql.Open("mysql","root:root@tcp(localhost:3306)/first")    // 
+
+
+
 # 一.数据库准备
 
 * 在MySQL中新建数据库名称first
