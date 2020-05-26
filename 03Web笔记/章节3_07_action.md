@@ -1,4 +1,44 @@
-1、
+1、if
+
+{{$n:=123}}定义变量
+
+```go
+{{if pipeline}} 
+T1 
+{{else}}
+T2
+{{end}}
+
+
+<body>
+取出数据:{{.}}<br/>
+{{if .}}
+    执行if
+{{else}}
+    执行else
+{{end}}
+html模板信息
+</body>    
+
+如果 . 的值为empty，不产生输出，否则输出T1执行结果。不改变dot的值。  Empty值包括false、0、任意nil指针或者nil接口，任意长度为0的数组、切片、字典
+```
+
+  
+
+2、
+
+```go
+//range第一种
+arr:= []string{"第一个", "第二个"}
+t.Execute(res,arr)
+//第二种
+m:=map[string]string{"key1":"value1","key2":"value2"}	//字典
+t.Execute(res,m)
+
+{{range .}}
+    {{.}}<br>
+{{end}}
+```
 
 
 
